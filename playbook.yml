@@ -1,0 +1,47 @@
+---
+- name: base playbook
+  hosts: all
+  tasks:
+   - name: set timezone
+     shell: |
+       cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
+       echo "Asia/Tokyo" > /etc/timezone
+
+   - name: for build-dep
+     shell: |
+       sed -i 's/# deb-src/deb-src/' /etc/apt/sources.list
+
+   - name : update system
+     apt : update_cache=yes
+
+   - name : install packages for building kernel
+     shell: |
+       apt build-dep -y linux
+
+   - name : install fakeroot
+     apt : name=fakeroot state=present
+
+   - name : install package for menuconfig
+     apt : name=libncurses-dev state=present
+
+   - name : install m4
+     apt : name=m4 state=present
+
+   - name : install build-essential
+     apt : name=build-essential state=present
+
+   - name: install pcre
+     apt: name=libpcre3-dev state=present
+
+   - name: install zlib
+     apt: name=zlib1g-dev state=present
+
+   - name: install openssl
+     apt: name=libssl-dev state=present
+
+   - name: install cpanm
+     apt: name=cpanminus state=present
+
+   - name: install gdb
+     apt: name=gdb state=present
+
